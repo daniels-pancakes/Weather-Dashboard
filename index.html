@@ -10,21 +10,23 @@
 </head>
 <body>
     <div class="columns is-multiline is-mobile">
-        <div class="column mt-6 is-centered is-full has-text-centered"><h1 class="title is-centered is-size-1">Weather Dashboard</h1></div>
+        <div class="column mt-6 is-centered is-full has-text-centered"><h1 class="title is-centered is-size-1">Weather Dashboard</h1>
+        <p>Courtesy of OpenWeather</p>
+        </div>
 
-        <div class="column is-one-sixth"></div>
+
         <div id="recent-searches" class="column is-one-sixth"></div>
-        <div class="column my-6 is-two-thirds">
+        <div class="column mt-4 mb-1 is-two-thirds">
             <form id="search-form">
             <input type="text" class="input is-half is-rounded is-medium" id="search-value" placeholder="Search for a city">
             </input>
             </form>
-            <div id="history"></div>
+            <div id="history" class="column"></div>
         </div>
-        <div class="column is-one-sixth"></div>
+
         <div class="column is-one-sixth"></div>
     </div>
-    <main id="main-container">
+    <main id="main-container" class="px-6">
 
     </main>
     <footer>

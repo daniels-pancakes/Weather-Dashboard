@@ -11,17 +11,24 @@ let requestURL;
 let forecastURL;
 
 let history = JSON.parse(localStorage.getItem("searches"));
+let currentCity = history[0];
+console.log(currentCity);
 if (history === null) {
     history = []
 } else {
+    loadCurrent();
     populateRecent();
 };
+
+function loadCurrent() {
+
+}
 
 function handleFormSubmit(event) {
     event.preventDefault();
     city = entry.value.trim();
     cityq = entry.value.trim().replaceAll(" ", "_");
-    history.push(city);
+    history.unshift(city);
     localStorage.setItem("searches", JSON.stringify(history));
     console.log(history);
     
@@ -50,9 +57,16 @@ function handleFormSubmit(event) {
 
                     let cityDiv = document.createElement("div");
 
+                    let cityCurrentContainer = document.createElement("div");
+                    cityCurrentContainer.setAttribute("id", "city-current");
+                    let cityCurrentContainerEl = document.getElementById("city-current");
                     let forecastContainer = document.createElement("div");
                     forecastContainer.setAttribute("id", "forecast");
                     let forecastEl = document.getElementById("forecast");
+
+                    let day0 = document.createElement("div");
+                    day0.setAttribute("id", "day0");
+                    let day0El = document.getElementById("day0");
 
                     let day1 = document.createElement("div");
                     day1.setAttribute("id", "day1");
@@ -75,70 +89,96 @@ function handleFormSubmit(event) {
                     let day5El = document.getElementById("day5");
 
                     cityDiv.setAttribute("id", "city-name");
-                    cityDiv.setAttribute("class", "column is-narrow title");
-                    cityDiv.innerHTML = `${city}<br><h2 class="subtitle">${cityState}</h2>`;
+                    cityDiv.setAttribute("class", "column has-text-right is-vcentered is-centered is-one-sixth is-offset-one-third title");
+                    cityDiv.innerHTML = `<h1 class="is-centered title">${city}</h1><h2 class="subtitle">${cityState}</h2>`;
                     let cityEl = document.getElementById("city-name");
 
-                    forecastContainer.setAttribute("class", "columns is-mobile is-vcentered is-multiline is-centered");
+                    cityCurrentContainer.setAttribute("class", "columns is-mobile is-vcentered is-centered");
+                    forecastContainer.setAttribute("class", "columns is-flex  is-mobile is-vcentered is-multiline is-centered");
                         console.log(data.list);
-                        day1.setAttribute("class", "column is-narrow");
+                        let hi1 = data.list.findIndex(function(element) {return element.dt_txt.includes("18:00")});
+
+                        let hi2 = hi1+8;
+                        let hi3 = hi2+8;
+                        let hi4 = hi3+8;
+                        let hi5 = hi4+8;
+
+                        console.log(hi1);
+                        console.log(data.list[hi1].main.temp);
+
+                        day0.setAttribute("class", "column is-centered is-one-sixth is-offset-one-third");
                         
-                        dateDay1 = data.list[5].dt_txt;
+                        dateDay0 = data.list[0].dt_txt;
+                        formatDateDay0 = dateDay0.slice(0, 10);
+                        dayJsFormatDateDay0 = dayjs(formatDateDay0).format('ddd, MM/DD/YY');
+
+                        day0.innerHTML =    `<p class="has-text-weight-bold">${dayJsFormatDateDay0}</p><p class="is-size-7">Temperature:</p> <h1 class="title has-text-warning">${Math.round(data.list[0].main.temp)}</h1> <p class="is-size-7">Wind speed: </p><p class="mb-0 pb-0 has-text-weight-bold  has-text-warning">${data.list[0].wind.speed}</p> <p class="is-size-7">Humidity: </p><p class="has-text-weight-bold has-text-warning">${data.list[0].main.humidity}%</p>`;
+
+                        day1.setAttribute("class", "column is-one-third-mobile is-narrow-tablet is-narrow-desktop");
+                        
+                        dateDay1 = data.list[hi1].dt_txt;
                         formatDateDay1 = dateDay1.slice(0, 10);
-
                         dayJsFormatDateDay1 = dayjs(formatDateDay1).format('ddd, MM/DD/YY');
-                        day1.innerHTML =    `<p class="has-text-weight-bold">${dayJsFormatDateDay1}</p><p class="is-size-7">Temperature:</p> <h1 class="title has-text-warning">${Math.round(data.list[5].main.temp)}</h1> <p class="is-size-7">Wind speed: </p><p class="mb-0 pb-0 has-text-weight-bold  has-text-warning">${data.list[5].wind.speed}</p> <p class="is-size-7">Humidity: </p><p class="has-text-weight-bold has-text-warning">${data.list[5].main.humidity}%</p>`;
 
-                        dateDay2 = data.list[13].dt_txt;
+                        day1.innerHTML =    `<p class="has-text-weight-bold">${dayJsFormatDateDay1}</p><p class="is-size-7">Temperature:</p> <h1 class="title has-text-warning">${Math.round(data.list[hi1].main.temp)}</h1> <p class="is-size-7">Wind speed: </p><p class="mb-0 pb-0 has-text-weight-bold  has-text-warning">${data.list[hi1].wind.speed}</p> <p class="is-size-7">Humidity: </p><p class="has-text-weight-bold has-text-warning">${data.list[hi1].main.humidity}%</p>`;
+
+                        dateDay2 = data.list[hi2].dt_txt;
                         formatDateDay2 = dateDay2.slice(0, 10);
-
                         dayJsFormatDateDay2 = dayjs(formatDateDay2).format('ddd, MM/DD/YY');
-                        day2.setAttribute("class", "column is-narrow");
-                        day2.innerHTML =    `<p class="has-text-weight-bold">${dayJsFormatDateDay2}</p><p class="is-size-7">Temperature:</p> <h1 class="title">${Math.round(data.list[13].main.temp)}</h1> <p class="is-size-7">Wind speed: </p><p class="has-text-weight-bold">${data.list[13].wind.speed}</p> <p class="is-size-7">Humidity: </p><p class="has-text-weight-bold">${data.list[13].main.humidity}%</p>`;
+
+                        day2.setAttribute("class", "column is-one-third-mobile is-narrow-tablet is-narrow-desktop");
+                        day2.innerHTML =    `<p class="has-text-weight-bold">${dayJsFormatDateDay2}</p><p class="is-size-7">Temperature:</p> <h1 class="title">${Math.round(data.list[13].main.temp)}</h1> <p class="is-size-7">Wind speed: </p><p class="has-text-weight-bold">${data.list[hi2].wind.speed}</p> <p class="is-size-7">Humidity: </p><p class="has-text-weight-bold">${data.list[hi2].main.humidity}%</p>`;
                         
-                        dateDay3 = data.list[21].dt_txt;
+                        dateDay3 = data.list[hi3].dt_txt;
                         formatDateDay3 = dateDay3.slice(0, 10);
-
                         dayJsFormatDateDay3 = dayjs(formatDateDay3).format('ddd, MM/DD/YY');
-                        day3.setAttribute("class", "column is-narrow");
-                        day3.innerHTML =    `<p class="has-text-weight-bold">${dayJsFormatDateDay3}</p><p class="is-size-7">Temperature:</p> <h1 class="title">${Math.round(data.list[21].main.temp)}</h1> <p class="is-size-7">Wind speed: </p><p class="has-text-weight-bold">${data.list[21].wind.speed}</p> <p class="is-size-7">Humidity: </p><p class="has-text-weight-bold">${data.list[21].main.humidity}%</p>`;
 
-                        dateDay4 = data.list[29].dt_txt;
+                        day3.setAttribute("class", "column is-one-third-mobile is-narrow-tablet is-narrow-desktop");
+                        day3.innerHTML =    `<p class="has-text-weight-bold">${dayJsFormatDateDay3}</p><p class="is-size-7">Temperature:</p> <h1 class="title">${Math.round(data.list[hi3].main.temp)}</h1> <p class="is-size-7">Wind speed: </p><p class="has-text-weight-bold">${data.list[hi3].wind.speed}</p> <p class="is-size-7">Humidity: </p><p class="has-text-weight-bold">${data.list[hi3].main.humidity}%</p>`;
+
+                        dateDay4 = data.list[hi4].dt_txt;
                         formatDateDay4 = dateDay4.slice(0, 10);
-                        
                         dayJsFormatDateDay4 = dayjs(formatDateDay4).format('ddd, MM/DD/YY');
-                        day4.setAttribute("class", "column is-narrow");
-                        day4.innerHTML =    `<p class="has-text-weight-bold">${dayJsFormatDateDay4}</p><p class="is-size-7">Temperature:</p> <h1 class="title">${Math.round(data.list[29].main.temp)}</h1> <p class="is-size-7">Wind speed: </p><p class="has-text-weight-bold">${data.list[29].wind.speed}</p> <p class="is-size-7">Humidity: </p><p class="has-text-weight-bold">${data.list[29].main.humidity}%</p>`;
 
-                        dateDay5 = data.list[37].dt_txt;
+                        day4.setAttribute("class", "column is-one-third-mobile is-narrow-tablet is-narrow-desktop");
+                        day4.innerHTML =    `<p class="has-text-weight-bold">${dayJsFormatDateDay4}</p><p class="is-size-7">Temperature:</p> <h1 class="title">${Math.round(data.list[hi4].main.temp)}</h1> <p class="is-size-7">Wind speed: </p><p class="has-text-weight-bold">${data.list[hi4].wind.speed}</p> <p class="is-size-7">Humidity: </p><p class="has-text-weight-bold">${data.list[hi4].main.humidity}%</p>`;
+
+                        dateDay5 = data.list[hi5].dt_txt;
                         formatDateDay5 = dateDay5.slice(0, 10);
-
                         dayJsFormatDateDay5 = dayjs(formatDateDay5).format('ddd, MM/DD/YY');
-                        day5.setAttribute("class", "column is-narrow");
-                        day5.innerHTML =    `<p class="has-text-weight-bold">${dayJsFormatDateDay5}</p><p class="is-size-7">Temperature:</p> <h1 class="title">${Math.round(data.list[37].main.temp)}</h1> <p class="is-size-7">Wind speed: </p><p class="has-text-weight-bold">${data.list[37].wind.speed}</p> <p class="is-size-7">Humidity: </p><p class="has-text-weight-bold">${data.list[37].main.humidity}%</p>`;
+
+                        day5.setAttribute("class", "column is-one-third-mobile is-narrow-tablet is-narrow-desktop");
+                        day5.innerHTML =    `<p class="has-text-weight-bold">${dayJsFormatDateDay5}</p><p class="is-size-7">Temperature:</p> <h1 class="title">${Math.round(data.list[hi5].main.temp)}</h1> <p class="is-size-7">Wind speed: </p><p class="has-text-weight-bold">${data.list[hi5].wind.speed}</p> <p class="is-size-7">Humidity: </p><p class="has-text-weight-bold">${data.list[hi5].main.humidity}%</p>`;
                     if (mainContainer.childElementCount!==0) {
-                        forecastEl.removeChild(cityEl);
+
+                        cityCurrentContainerEl.removeChild(cityEl);
+                        cityCurrentContainerEl.removeChild(day0El);
                         forecastEl.removeChild(day1El);
                         forecastEl.removeChild(day2El);
                         forecastEl.removeChild(day3El);
                         forecastEl.removeChild(day4El);
                         forecastEl.removeChild(day5El);
+                        mainContainer.removeChild(cityCurrentContainerEl);
                         mainContainer.removeChild(forecastEl);
 
-                        forecastContainer.appendChild(cityDiv);
+                        cityCurrentContainer.appendChild(cityDiv);
+                        cityCurrentContainer.appendChild(day0);
                         forecastContainer.appendChild(day1);
                         forecastContainer.appendChild(day2);
                         forecastContainer.appendChild(day3);
                         forecastContainer.appendChild(day4);
                         forecastContainer.appendChild(day5);
+                        mainContainer.appendChild(cityCurrentContainer);
                         mainContainer.appendChild(forecastContainer);
                     } else {
-                        forecastContainer.appendChild(cityDiv);
+                        cityCurrentContainer.appendChild(cityDiv);
+                    cityCurrentContainer.appendChild(day0);
                     forecastContainer.appendChild(day1);
                     forecastContainer.appendChild(day2);
                     forecastContainer.appendChild(day3);
                     forecastContainer.appendChild(day4);
                     forecastContainer.appendChild(day5);
+                    mainContainer.appendChild(cityCurrentContainer);
                     mainContainer.appendChild(forecastContainer);
                     }
 
@@ -151,7 +191,7 @@ function handleFormSubmit(event) {
 
 function populateRecent() {
     for (let i = 0; i < 6; ++i) {
-
+        console.log(history[i]);
     } 
 
 };
