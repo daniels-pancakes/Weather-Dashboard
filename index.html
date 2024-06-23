@@ -5,28 +5,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.0/css/bulma.min.css">
     <link rel="stylesheet" href="./assets/css/style.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.10.7/dayjs.min.js"></script>
     <title>Weather Dashboard</title>
 </head>
 <body>
-    <header>
-    </header>
-    <aside>
-        <form id="search-form">
-        <h1 class="title"><label for="Search for a city">Search for a city:</label></h1>
-        <input type="text" id="search-value">
-        </input>
-        <button id="search-button">
-        Search   
-        </button>
-        </form>
-        <div id="history">
+    <div class="columns is-multiline is-mobile">
+        <div class="column mt-6 is-centered is-full has-text-centered"><h1 class="title is-centered is-size-1">Weather Dashboard</h1></div>
+
+        <div class="column is-one-sixth"></div>
+        <div id="recent-searches" class="column is-one-sixth"></div>
+        <div class="column my-6 is-two-thirds">
+            <form id="search-form">
+            <input type="text" class="input is-half is-rounded is-medium" id="search-value" placeholder="Search for a city">
+            </input>
+            </form>
+            <div id="history"></div>
         </div>
-    </aside>
+        <div class="column is-one-sixth"></div>
+        <div class="column is-one-sixth"></div>
+    </div>
     <main id="main-container">
 
     </main>
     <footer>
     </footer>
+    </div>
     <script src="./assets/js/script.js"></script>
 </body>
 </html>
