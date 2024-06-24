@@ -1,3 +1,4 @@
+// I start by creating some variables that will be used further into the script.
 const APIkey = "&appid=cbfda5c198563b28c04126c28f33c8f6";
 const searchForm = document.getElementById("search-form");
 const entry = document.getElementById("search-value");
@@ -10,20 +11,18 @@ let cityLon;
 let requestURL;
 let forecastURL;
 
+// This is a template I've come to use when working with local storage. It seems to resolve some issues, particularly when someone is visiting the page for the first time and Local Storage returns null.
+
 let history = JSON.parse(localStorage.getItem("searches"));
-let currentCity = JSON.parse(localStorage.getItem("current"));
-// let currentCity = history[0];
-// console.log(currentCity);
+// let currentCity = JSON.parse(localStorage.getItem("current"));
+
 if (history === null) {
     history = [];
 } else {
     populateRecent();
 };
-// if (currentCity === null) {
-//     current = [];
-// } else {
-//     loadCurrent();
-// };
+
+// Function declarations begin here.
 
 function handleFormSubmit(event) {
     event.preventDefault();
@@ -33,43 +32,45 @@ function handleFormSubmit(event) {
         history.unshift(city);
         history.splice(5+1);
         let search = document.createElement("span");
-        search.innerHTML = `<span class="tag is-hoverable is-dark mx-2 my-2 is-size-6">${history[0]}</span>`;
+        search.innerHTML = `<span id="recent-button" class="tag is-hoverable is-dark mx-2 my-2 is-size-6">${history[0]}</span>`;
         searchHistory.insertAdjacentHTML('afterbegin', `<span class="tag is-hoverable is-dark mx-2 my-2 is-size-6">${history[0]}</span>`);
         let searchNo = document.getElementById("recent-searches").childElementCount;
-        // console.log(searchNo);
+
         if (searchNo > 6) {
         searchHistory.removeChild(searchHistory.children[6]);
         }
     }
     localStorage.setItem("searches", JSON.stringify(history));
-    console.log(history);
     processRequest(city, cityq);
 
-    // let currentSearchedCity = {
-    //     city: 
-    //     cityq:
-    // }
-
+// This function is admittedly a bit of a monster. Going into this project I was still wrapping my head around when it is appropriate to break up functionality into different functions. Eventually this project did force me to split this up a little bit which was a good learning experience. I am sure I could further divide this up but for now it works about 95% of what I intended and satisfies the project requirements.
 }
 const processRequest = function() {
     requestURL = `https://api.openweathermap.org/geo/1.0/direct?q=${cityq}&limit=1${APIkey}`;
     fetch(requestURL)
         .then(function (response) {
-            return response.json();
+            if (response.ok) {
+                return response.json();
+            } else {
+                throw new Error('Network reponse not received.');
+            }
         })
         .then(function (data) {
-            // console.log(data);
+
+        if (data.length > 0) {
             cityState = data[0].state;
             console.log("Lat: " + data[0].lat);
             console.log("Lon: " + data[0].lon);
             cityLat = data[0].lat;
             cityLon = data[0].lon;
             forecastURL = `https://api.openweathermap.org/data/2.5/forecast?lat=${cityLat}&lon=${cityLon}&units=imperial${APIkey}`;
-            // console.log(forecastURL);
+
             fetch(forecastURL)
                 .then(function (response) {
                     return response.json();
                 })
+
+                // This following section is the beast that makes this look a little more convoluted than it is. It is the handling of the creation of all of the HTML elements after pulling the data from OpenWeather's API. It is a straightforward process but looks messy. Especially because of my use of Bulma. I don't think Bulma was intended to be outfitted from JavaScript as it makes all of this about 5 times wordier than usual. Still it all seems to be working about 95% as intended.
                 .then(function (data) {
 
                     let recentSearch = document.createElement("ul");
@@ -122,9 +123,6 @@ const processRequest = function() {
                         let hi3 = hi2+8;
                         let hi4 = hi3+8;
                         let hi5 = hi4+8;
-
-                        // console.log(hi1);
-                        // console.log(data.list[hi1].main.temp);
 
                         day0.setAttribute("class", "column is-centered is-one-sixth is-offset-one-third");
                         
@@ -203,37 +201,39 @@ const processRequest = function() {
                     }
 
                 })
-
-        });
+            
+            } else {
+                console.error('No data found for the given city. Please try again.');
+            };
+            })
+            .catch(function(error) {
+                console.error('Fetch error:', error);
+            });
+            ;
+        
     entry.value = "";
 };
 
+//This function will load from Local Storage the 6 most recent searched cities.
 function populateRecent() {
-
-
+// The Math.min function was indispensable here in achieving functionality to have my list of recent searches not exceed 6.
     let maxNoEl = Math.min(history.length, 6);
     for (let i = 0; i < maxNoEl; ++i) {
         let search = document.createElement("span");
-        // console.log(history[i]);
-
-        // search.setAttribute("id", "recentSearch");
-        // let prevSearchList = document.getElementById("recentSearch");
         search.innerHTML = `<span class="tag is-hoverable is-dark mx-2 my-2 is-size-6">${history[i]}</span>`;
         searchHistory.appendChild(search);
     } 
 
 };
 
-// function loadCurrent() {
-
-//     processRequest(city, cityq);
-// }
-// loadCurrent();
-
+// These are my Event Listeners.
+// The first is for the search form submission.
 searchForm.addEventListener("submit", handleFormSubmit);
+// The second is for handling when the recent search tags are clicked.
 searchHistory.addEventListener("click", function(event) {
+    if (event.target.classList.contains('tag')) {
     city = event.target.textContent;
     cityq = event.target.textContent.replaceAll(" ", "_");
     processRequest(city, cityq);
-
+    }
 });
