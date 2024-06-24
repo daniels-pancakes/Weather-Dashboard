@@ -30,7 +30,12 @@ function handleFormSubmit(event) {
     history.unshift(city);
     localStorage.setItem("searches", JSON.stringify(history));
     console.log(history);
-    
+    processRequest(city, cityq);
+    let search = document.createElement("span");
+    search.innerHTML = `<span class="tag is-hoverable is-dark mx-2 my-2 is-size-6">${history[0]}</span>`;
+    searchHistory.insertAdjacentHTML('afterbegin', `<span class="tag is-hoverable is-dark mx-2 my-2 is-size-6">${history[0]}</span>`);
+}
+const processRequest = function() {
     requestURL = `https://api.openweathermap.org/geo/1.0/direct?q=${cityq}&limit=1${APIkey}`;
     fetch(requestURL)
         .then(function (response) {
@@ -188,10 +193,13 @@ function handleFormSubmit(event) {
 };
 
 function populateRecent() {
+
+
     let maxNoEl = Math.min(history.length, 6);
     for (let i = 0; i < maxNoEl; ++i) {
-        console.log(history[i]);
         let search = document.createElement("span");
+        console.log(history[i]);
+
         // search.setAttribute("id", "recentSearch");
         // let prevSearchList = document.getElementById("recentSearch");
         search.innerHTML = `<span class="tag is-hoverable is-dark mx-2 my-2 is-size-6">${history[i]}</span>`;
@@ -202,7 +210,9 @@ function populateRecent() {
 
 searchForm.addEventListener("submit", handleFormSubmit);
 searchHistory.addEventListener("click", function(event) {
-    handleFormSubmit(event.target.textContent);
+    city = event.target.textContent;
+    cityq = event.target.textContent.replaceAll(" ", "_");
+    processRequest(city, cityq);
 }
 
 )
