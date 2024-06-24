@@ -27,6 +27,14 @@ The following image shows the web application's appearance and functionality:
 
 ![The weather app includes a search option, a list of cities, and a five-day forecast and current weather conditions.](./assets/images/preview.png)
 
+## Usage
+
+To view the webpage please visit the following link.
+[Link](https://daniels-pancakes.github.io/Weather-Dashboard/)
+
+There are additional comments within the JavaScript code. There are comments throughout the GitHub repository commits.
+[Link](https://github.com/daniels-pancakes/Weather-Dashboard/)
+
 ## Credits
 
 - [OpenWeather](https://openweathermap.org/)
