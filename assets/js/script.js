@@ -11,17 +11,16 @@ let requestURL;
 let forecastURL;
 
 let history = JSON.parse(localStorage.getItem("searches"));
-let currentCity = history[0];
-console.log(currentCity);
+// let currentCity = history[0];
+// console.log(currentCity);
 if (history === null) {
-    history = []
+    history = [];
 } else {
     loadCurrent();
     populateRecent();
 };
 
 function loadCurrent() {
-
 }
 
 function handleFormSubmit(event) {
@@ -90,11 +89,11 @@ function handleFormSubmit(event) {
 
                     cityDiv.setAttribute("id", "city-name");
                     cityDiv.setAttribute("class", "column has-text-right is-vcentered is-centered is-one-sixth is-offset-one-third title");
-                    cityDiv.innerHTML = `<h1 class="is-centered title">${city}</h1><h2 class="subtitle">${cityState}</h2>`;
+                    cityDiv.innerHTML = `<img src="https://openweathermap.org/img/wn/${data.list[0].weather[0].icon}@2x.png" alt="${data.list[0].weather[0].description}" /><h1 class="is-centered has-text-warning title">${city}</h1><h2 class="subtitle">${cityState}</h2>`;
                     let cityEl = document.getElementById("city-name");
 
-                    cityCurrentContainer.setAttribute("class", "columns is-mobile is-vcentered is-centered");
-                    forecastContainer.setAttribute("class", "columns is-flex  is-mobile is-vcentered is-multiline is-centered");
+                    cityCurrentContainer.setAttribute("class", "columns pb-3 mb-5 is-mobile is-vcentered is-centered");
+                    forecastContainer.setAttribute("class", "columns is-flex is-mobile is-vcentered is-multiline is-centered");
                         console.log(data.list);
                         let hi1 = data.list.findIndex(function(element) {return element.dt_txt.includes("18:00")});
 
@@ -112,7 +111,7 @@ function handleFormSubmit(event) {
                         formatDateDay0 = dateDay0.slice(0, 10);
                         dayJsFormatDateDay0 = dayjs(formatDateDay0).format('ddd, MM/DD/YY');
 
-                        day0.innerHTML =    `<p class="has-text-weight-bold">${dayJsFormatDateDay0}</p><p class="is-size-7">Temperature:</p> <h1 class="title has-text-warning">${Math.round(data.list[0].main.temp)}</h1> <p class="is-size-7">Wind speed: </p><p class="mb-0 pb-0 has-text-weight-bold  has-text-warning">${data.list[0].wind.speed}</p> <p class="is-size-7">Humidity: </p><p class="has-text-weight-bold has-text-warning">${data.list[0].main.humidity}%</p>`;
+                        day0.innerHTML =    `<p class="has-text-weight-bold has-text-warning">${dayJsFormatDateDay0}</p><p class="is-size-7">Temperature:</p> <h1 class="title has-text-warning">${Math.round(data.list[0].main.temp)}</h1> <p class="is-size-7">Wind speed: </p><p class="mb-0 pb-0 has-text-weight-bold  has-text-warning">${data.list[0].wind.speed} mph</p> <p class="is-size-7">Humidity: </p><p class="has-text-weight-bold has-text-warning">${data.list[0].main.humidity}%</p>`;
 
                         day1.setAttribute("class", "column is-one-third-mobile is-narrow-tablet is-narrow-desktop");
                         
@@ -120,35 +119,35 @@ function handleFormSubmit(event) {
                         formatDateDay1 = dateDay1.slice(0, 10);
                         dayJsFormatDateDay1 = dayjs(formatDateDay1).format('ddd, MM/DD/YY');
 
-                        day1.innerHTML =    `<p class="has-text-weight-bold">${dayJsFormatDateDay1}</p><p class="is-size-7">Temperature:</p> <h1 class="title has-text-warning">${Math.round(data.list[hi1].main.temp)}</h1> <p class="is-size-7">Wind speed: </p><p class="mb-0 pb-0 has-text-weight-bold  has-text-warning">${data.list[hi1].wind.speed}</p> <p class="is-size-7">Humidity: </p><p class="has-text-weight-bold has-text-warning">${data.list[hi1].main.humidity}%</p>`;
+                        day1.innerHTML =    `<p class="has-text-weight-bold">${dayJsFormatDateDay1}</p><p class="is-size-7">Temperature:</p> <h1 class="title">${Math.round(data.list[hi1].main.temp)}</h1> <p class="is-size-7">Wind speed: </p><p class="mb-0 pb-0 has-text-weight-bold">${data.list[hi1].wind.speed} mph</p> <p class="is-size-7">Humidity: </p><p class="has-text-weight-bold">${data.list[hi1].main.humidity}%</p><img src="https://openweathermap.org/img/wn/${data.list[hi1].weather[0].icon}.png" alt="${data.list[hi1].weather[0].description}" />`;
 
                         dateDay2 = data.list[hi2].dt_txt;
                         formatDateDay2 = dateDay2.slice(0, 10);
                         dayJsFormatDateDay2 = dayjs(formatDateDay2).format('ddd, MM/DD/YY');
 
                         day2.setAttribute("class", "column is-one-third-mobile is-narrow-tablet is-narrow-desktop");
-                        day2.innerHTML =    `<p class="has-text-weight-bold">${dayJsFormatDateDay2}</p><p class="is-size-7">Temperature:</p> <h1 class="title">${Math.round(data.list[13].main.temp)}</h1> <p class="is-size-7">Wind speed: </p><p class="has-text-weight-bold">${data.list[hi2].wind.speed}</p> <p class="is-size-7">Humidity: </p><p class="has-text-weight-bold">${data.list[hi2].main.humidity}%</p>`;
+                        day2.innerHTML =    `<p class="has-text-weight-bold">${dayJsFormatDateDay2}</p><p class="is-size-7">Temperature:</p> <h1 class="title">${Math.round(data.list[hi2].main.temp)}</h1> <p class="is-size-7">Wind speed: </p><p class="has-text-weight-bold">${data.list[hi2].wind.speed} mph</p> <p class="is-size-7">Humidity: </p><p class="has-text-weight-bold">${data.list[hi2].main.humidity}%</p><img src="https://openweathermap.org/img/wn/${data.list[hi2].weather[0].icon}.png" alt="${data.list[hi2].weather[0].description}"/>`;
                         
                         dateDay3 = data.list[hi3].dt_txt;
                         formatDateDay3 = dateDay3.slice(0, 10);
                         dayJsFormatDateDay3 = dayjs(formatDateDay3).format('ddd, MM/DD/YY');
 
                         day3.setAttribute("class", "column is-one-third-mobile is-narrow-tablet is-narrow-desktop");
-                        day3.innerHTML =    `<p class="has-text-weight-bold">${dayJsFormatDateDay3}</p><p class="is-size-7">Temperature:</p> <h1 class="title">${Math.round(data.list[hi3].main.temp)}</h1> <p class="is-size-7">Wind speed: </p><p class="has-text-weight-bold">${data.list[hi3].wind.speed}</p> <p class="is-size-7">Humidity: </p><p class="has-text-weight-bold">${data.list[hi3].main.humidity}%</p>`;
+                        day3.innerHTML =    `<p class="has-text-weight-bold">${dayJsFormatDateDay3}</p><p class="is-size-7">Temperature:</p> <h1 class="title">${Math.round(data.list[hi3].main.temp)}</h1> <p class="is-size-7">Wind speed: </p><p class="has-text-weight-bold">${data.list[hi3].wind.speed} mph</p> <p class="is-size-7">Humidity: </p><p class="has-text-weight-bold">${data.list[hi3].main.humidity}%</p><img src="https://openweathermap.org/img/wn/${data.list[hi3].weather[0].icon}.png" alt="${data.list[hi3].weather[0].description}"/>`;
 
                         dateDay4 = data.list[hi4].dt_txt;
                         formatDateDay4 = dateDay4.slice(0, 10);
                         dayJsFormatDateDay4 = dayjs(formatDateDay4).format('ddd, MM/DD/YY');
 
                         day4.setAttribute("class", "column is-one-third-mobile is-narrow-tablet is-narrow-desktop");
-                        day4.innerHTML =    `<p class="has-text-weight-bold">${dayJsFormatDateDay4}</p><p class="is-size-7">Temperature:</p> <h1 class="title">${Math.round(data.list[hi4].main.temp)}</h1> <p class="is-size-7">Wind speed: </p><p class="has-text-weight-bold">${data.list[hi4].wind.speed}</p> <p class="is-size-7">Humidity: </p><p class="has-text-weight-bold">${data.list[hi4].main.humidity}%</p>`;
+                        day4.innerHTML =    `<p class="has-text-weight-bold">${dayJsFormatDateDay4}</p><p class="is-size-7">Temperature:</p> <h1 class="title">${Math.round(data.list[hi4].main.temp)}</h1> <p class="is-size-7">Wind speed: </p><p class="has-text-weight-bold">${data.list[hi4].wind.speed} mph</p> <p class="is-size-7">Humidity: </p><p class="has-text-weight-bold">${data.list[hi4].main.humidity}%</p><img src="https://openweathermap.org/img/wn/${data.list[hi4].weather[0].icon}.png" alt="${data.list[hi4].weather[0].description}"/>`;
 
                         dateDay5 = data.list[hi5].dt_txt;
                         formatDateDay5 = dateDay5.slice(0, 10);
                         dayJsFormatDateDay5 = dayjs(formatDateDay5).format('ddd, MM/DD/YY');
 
                         day5.setAttribute("class", "column is-one-third-mobile is-narrow-tablet is-narrow-desktop");
-                        day5.innerHTML =    `<p class="has-text-weight-bold">${dayJsFormatDateDay5}</p><p class="is-size-7">Temperature:</p> <h1 class="title">${Math.round(data.list[hi5].main.temp)}</h1> <p class="is-size-7">Wind speed: </p><p class="has-text-weight-bold">${data.list[hi5].wind.speed}</p> <p class="is-size-7">Humidity: </p><p class="has-text-weight-bold">${data.list[hi5].main.humidity}%</p>`;
+                        day5.innerHTML =    `<p class="has-text-weight-bold">${dayJsFormatDateDay5}</p><p class="is-size-7">Temperature:</p> <h1 class="title">${Math.round(data.list[hi5].main.temp)}</h1> <p class="is-size-7">Wind speed: </p><p class="has-text-weight-bold">${data.list[hi5].wind.speed} mph</p> <p class="is-size-7">Humidity: </p><p class="has-text-weight-bold">${data.list[hi5].main.humidity}%</p><img src="https://openweathermap.org/img/wn/${data.list[hi5].weather[0].icon}.png" alt="${data.list[hi5].weather[0].description}"/>`;
                     if (mainContainer.childElementCount!==0) {
 
                         cityCurrentContainerEl.removeChild(cityEl);
@@ -185,19 +184,28 @@ function handleFormSubmit(event) {
                 })
 
         });
-
     entry.value = "";
 };
 
 function populateRecent() {
-    for (let i = 0; i < 6; ++i) {
+    let maxNoEl = Math.min(history.length, 6);
+    for (let i = 0; i < maxNoEl; ++i) {
         console.log(history[i]);
+        let search = document.createElement("span");
+        // search.setAttribute("id", "recentSearch");
+        // let prevSearchList = document.getElementById("recentSearch");
+        search.innerHTML = `<span class="tag is-hoverable is-dark mx-2 my-2 is-size-6">${history[i]}</span>`;
+        searchHistory.appendChild(search);
     } 
 
 };
 
 searchForm.addEventListener("submit", handleFormSubmit);
+searchHistory.addEventListener("click", function(event) {
+    handleFormSubmit(event.target.textContent);
+}
 
+)
 
 
 // https://api.openweathermap.org/data/2.5/forecast?
