@@ -11,29 +11,45 @@ let requestURL;
 let forecastURL;
 
 let history = JSON.parse(localStorage.getItem("searches"));
+let currentCity = JSON.parse(localStorage.getItem("current"));
 // let currentCity = history[0];
 // console.log(currentCity);
 if (history === null) {
     history = [];
 } else {
-    loadCurrent();
     populateRecent();
 };
-
-function loadCurrent() {
-}
+// if (currentCity === null) {
+//     current = [];
+// } else {
+//     loadCurrent();
+// };
 
 function handleFormSubmit(event) {
     event.preventDefault();
     city = entry.value.trim();
     cityq = entry.value.trim().replaceAll(" ", "_");
-    history.unshift(city);
+    if (!history.includes(city)) {
+        history.unshift(city);
+        history.splice(5+1);
+        let search = document.createElement("span");
+        search.innerHTML = `<span class="tag is-hoverable is-dark mx-2 my-2 is-size-6">${history[0]}</span>`;
+        searchHistory.insertAdjacentHTML('afterbegin', `<span class="tag is-hoverable is-dark mx-2 my-2 is-size-6">${history[0]}</span>`);
+        let searchNo = document.getElementById("recent-searches").childElementCount;
+        // console.log(searchNo);
+        if (searchNo > 6) {
+        searchHistory.removeChild(searchHistory.children[6]);
+        }
+    }
     localStorage.setItem("searches", JSON.stringify(history));
     console.log(history);
     processRequest(city, cityq);
-    let search = document.createElement("span");
-    search.innerHTML = `<span class="tag is-hoverable is-dark mx-2 my-2 is-size-6">${history[0]}</span>`;
-    searchHistory.insertAdjacentHTML('afterbegin', `<span class="tag is-hoverable is-dark mx-2 my-2 is-size-6">${history[0]}</span>`);
+
+    // let currentSearchedCity = {
+    //     city: 
+    //     cityq:
+    // }
+
 }
 const processRequest = function() {
     requestURL = `https://api.openweathermap.org/geo/1.0/direct?q=${cityq}&limit=1${APIkey}`;
@@ -42,14 +58,14 @@ const processRequest = function() {
             return response.json();
         })
         .then(function (data) {
-            console.log(data);
+            // console.log(data);
             cityState = data[0].state;
             console.log("Lat: " + data[0].lat);
             console.log("Lon: " + data[0].lon);
             cityLat = data[0].lat;
             cityLon = data[0].lon;
             forecastURL = `https://api.openweathermap.org/data/2.5/forecast?lat=${cityLat}&lon=${cityLon}&units=imperial${APIkey}`;
-            console.log(forecastURL);
+            // console.log(forecastURL);
             fetch(forecastURL)
                 .then(function (response) {
                     return response.json();
@@ -94,7 +110,7 @@ const processRequest = function() {
 
                     cityDiv.setAttribute("id", "city-name");
                     cityDiv.setAttribute("class", "column has-text-right is-vcentered is-centered is-one-sixth is-offset-one-third title");
-                    cityDiv.innerHTML = `<img src="https://openweathermap.org/img/wn/${data.list[0].weather[0].icon}@2x.png" alt="${data.list[0].weather[0].description}" /><h1 class="is-centered has-text-warning title">${city}</h1><h2 class="subtitle">${cityState}</h2>`;
+                    cityDiv.innerHTML = `<img class="is-rounded" src="https://openweathermap.org/img/wn/${data.list[0].weather[0].icon}@2x.png" alt="${data.list[0].weather[0].description}" /><h1 class="is-centered has-text-warning title">${city}</h1><h2 class="subtitle">${cityState}</h2>`;
                     let cityEl = document.getElementById("city-name");
 
                     cityCurrentContainer.setAttribute("class", "columns pb-3 mb-5 is-mobile is-vcentered is-centered");
@@ -107,8 +123,8 @@ const processRequest = function() {
                         let hi4 = hi3+8;
                         let hi5 = hi4+8;
 
-                        console.log(hi1);
-                        console.log(data.list[hi1].main.temp);
+                        // console.log(hi1);
+                        // console.log(data.list[hi1].main.temp);
 
                         day0.setAttribute("class", "column is-centered is-one-sixth is-offset-one-third");
                         
@@ -198,7 +214,7 @@ function populateRecent() {
     let maxNoEl = Math.min(history.length, 6);
     for (let i = 0; i < maxNoEl; ++i) {
         let search = document.createElement("span");
-        console.log(history[i]);
+        // console.log(history[i]);
 
         // search.setAttribute("id", "recentSearch");
         // let prevSearchList = document.getElementById("recentSearch");
@@ -208,20 +224,16 @@ function populateRecent() {
 
 };
 
+// function loadCurrent() {
+
+//     processRequest(city, cityq);
+// }
+// loadCurrent();
+
 searchForm.addEventListener("submit", handleFormSubmit);
 searchHistory.addEventListener("click", function(event) {
     city = event.target.textContent;
     cityq = event.target.textContent.replaceAll(" ", "_");
     processRequest(city, cityq);
-}
 
-)
-
-
-// https://api.openweathermap.org/data/2.5/forecast?
-//lat= &lon=
-
-// &units=imperial
-// APIkey
-
-//https://api.openweathermap.org/geo/1.0/direct?q=   &limit=1" + APIkey
+});
