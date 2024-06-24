@@ -2,45 +2,37 @@
 
 ## Description
 
-Third-party APIs allow developers to access their data and functionality by making requests with specific parameters to a URL. Developers are often tasked with retrieving data from another application's API and using it in the context of their own. Your challenge is to build a weather dashboard that will run in the browser and feature dynamically updated HTML and CSS.
+For this project the goal was to build a Web Application that would harness the power of OpenWeather's API to fetch a Weather Forecast.
 
-Use the [5 Day Weather Forecast](https://openweathermap.org/forecast5) to retrieve weather data for cities. The base URL should look like the following: `https://api.openweathermap.org/data/2.5/forecast?lat={lat}&lon={lon}&appid={API key}`. After registering for a new API key, you may need to wait up to 2 hours for that API key to activate.
+Upon fetching the data from OpenWeather it must be navigated and organized so that it can be presented in a way that is useful to the user.
 
-**Hint**: Using the 5 Day Weather Forecast API, you'll notice that you will need to pass in coordinates instead of just a city name. Using the OpenWeatherMap APIs, how could we retrieve geographical coordinates given a city name?
+Some additional functionalities included utilizing Local Storage to maintain a list of recent searches.
 
-You will use `localStorage` to store any persistent data. For more information on how to work with the OpenWeather API, refer to the [Full-Stack Blog on how to use API keys](https://coding-boot-camp.github.io/full-stack/apis/how-to-use-api-keys).
+I have employed Bulma CSS Framework for the styling of this Web Application.
 
 ## User Story
 
 ```
-AS A traveler
-I WANT to see the weather outlook for multiple cities
-SO THAT I can plan a trip accordingly
+AS A traveler,
+I WANT to be able to easily review weather upon searching city names,
+SO THAT I can plan accordingly,
+WHEN I search for a city, I expect there to be some persistence to this data,
+WHEN I access the Weather Dashboard again on subsequent visits,
+I WANT to be able to see my recent searches.
 ```
-
-## Acceptance Criteria
-
-```
-GIVEN a weather dashboard with form inputs
-WHEN I search for a city
-THEN I am presented with current and future conditions for that city and that city is added to the search history
-WHEN I view current weather conditions for that city
-THEN I am presented with the city name, the date, an icon representation of weather conditions, the temperature, the humidity, and the wind speed
-WHEN I view future weather conditions for that city
-THEN I am presented with a 5-day forecast that displays the date, an icon representation of weather conditions, the temperature, the wind speed, and the humidity
-WHEN I click on a city in the search history
-THEN I am again presented with current and future conditions for that city
-```
-
 
 ## Preview
 
 The following image shows the web application's appearance and functionality:
 
-![The weather app includes a search option, a list of cities, and a five-day forecast and current weather conditions for Atlanta.](./Assets/06-server-side-apis-homework-demo.png)
+![The weather app includes a search option, a list of cities, and a five-day forecast and current weather conditions.](./assets/images/preview.png)
 
 ## Credits
 
-- mdn web docs
-- W3Schools
+- [OpenWeather](https://openweathermap.org/)
+- [Bulma](https://bulma.io/)
+- [Julienne Knowles](https://github.com/jknowles10)
+- [Ken Wagner](https://github.com/horizonbound0/)
+- [MDN Web Docs](https://developer.mozilla.org/en-US/)
+- [W3Schools](https://www.w3schools.com/)
 - The Coding Boot Camp at UT Austin
